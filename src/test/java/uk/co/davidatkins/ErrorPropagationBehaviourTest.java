@@ -1,14 +1,12 @@
 package uk.co.davidatkins;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.camel.CamelExecutionException;
-import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * TODO: sub route with IllegalArgumentExceptionHandler without noErrorHandler
@@ -29,6 +27,7 @@ public class ErrorPropagationBehaviourTest extends CamelTestSupport {
 
                 onException(GenericException.class)
                         .handled(true)
+                       // .handled(false)
                         .log("GenericException Handled")
                         .setBody(constant("GenericException Handled"));
 
@@ -112,6 +111,9 @@ public class ErrorPropagationBehaviourTest extends CamelTestSupport {
         return routes.toArray(new RouteBuilder[routes.size()]);
     }
 
+ 
+   
+ 
     @Test
     public void ifNoExceptionThrown_RouteCompletes() {
         String result = template().requestBody("direct:main-route", "Do Nothing", String.class);
@@ -173,5 +175,6 @@ public class ErrorPropagationBehaviourTest extends CamelTestSupport {
         String result = template().requestBody("direct:main-route","Throw RouteSpecificException in sub-route-specific-error-handler",String.class);
         assertEquals("RouteSpecificException Handled In Sub", result);
     }
-
+    
+    
 }
